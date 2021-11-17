@@ -17,9 +17,24 @@
 #include <audio/tegra186-audio-dai-links.dtsi>
 #include <dt-bindings/gpio/tegra234-gpio.h>
 #include <dt-bindings/audio/tegra234-audio.h>
-#include <audio/tegra-platforms-audio-dmic3-5-switch.dtsi>
 
 / {
+	i2c@31e0000 {
+		cs42888: codec@48 {
+			compatible = "cirrus,cs42888";
+			reg = <0x48>;
+			clocks = <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
+			clock-names = "mclk";
+			VA-supply = <&vdd_3v3_sys>;
+			VD-supply = <&vdd_3v3_sys>;
+			VLS-supply = <&vdd_3v3_sys>;
+			VLC-supply = <&vdd_3v3_sys>;
+			#sound-dai-cells = <0>;
+			sound-name-prefix = "CVB-RT";
+			status = "okay";
+		};
+	};
+
 	aconnect@2a41000 {
 		status = "okay";
 
@@ -32,9 +47,12 @@
 		};
 
 		ahub {
-			/* I2S4 in Short frame sync for BT SCO */
-			i2s@2901300 {
-				bclk-ratio = <4>;
+			status = "okay";
+
+			/* I2S1 */
+			i2s@2901000 {
+				status = "okay";
+				bclk-ratio = <1>;
 			};
 		};
 	};
@@ -44,20 +62,40 @@
 	};
 
 	hda@3510000 {
-		nvidia,model = "NVIDIA Jetson Concord HDA";
+		nvidia,model = "NVIDIA Jetson Prometheus HDA";
 		status = "okay";
 	};
 
 	tegra_sound: sound {
 		status = "okay";
 		compatible = "nvidia,tegra186-ape";
-		nvidia-audio-card,name = "NVIDIA Jetson Concord APE";
+		nvidia-audio-card,name = "NVIDIA Jetson Prometheus APE";
 		clocks = <&bpmp_clks TEGRA234_CLK_PLLA>,
 			 <&bpmp_clks TEGRA234_CLK_PLLA_OUT0>,
 			 <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
 		clock-names = "pll_a", "pll_a_out0", "extern1";
 		assigned-clocks = <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
 		assigned-clock-parents = <&bpmp_clks TEGRA234_CLK_PLLA_OUT0>;
+
+		nvidia-audio-card,widgets =
+			"Headphone",	"CVB-RT Headphone Jack",
+			"Microphone",	"CVB-RT Microphone Jack";
+
+		nvidia-audio-card,routing =
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT1L",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT1R",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT2L",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT2R",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT3L",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT3R",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT4L",
+			"CVB-RT Headphone Jack",	"CVB-RT AOUT4R",
+			"CVB-RT AIN1L",			"CVB-RT Microphone Jack", /* Front mic */
+			"CVB-RT AIN1R",			"CVB-RT Microphone Jack", /* Rear mic */
+			"CVB-RT AIN2L",			"CVB-RT Microphone Jack", /* Line-in L */
+			"CVB-RT AIN2R",			"CVB-RT Microphone Jack"; /* Line-in R */
+
+		nvidia-audio-card,mclk-fs = <512>;
 	};
 };
 
@@ -69,10 +107,17 @@
  * platform specific files.
  */
 
-hdr40_snd_link_i2s: &i2s2_to_codec { };
+&i2s1_to_codec {
+	link-name = "cs42888 playback";
 
-/* Override with BT SCO entries */
-&i2s4_to_codec {
-	format = "dsp_a";
-	bitclock-inversion;
+	/* Tegra will generate MCLK, SCLK, and FSYNC */
+	format = "dsp_a"; /* TDM with 1-bit offset */
+	num-channel = <8>;
+	srate = <48000>;
+	bit-format = "s32_le";
+
+	codec {
+		sound-dai = <&cs42888>;
+		prefix = "CVB-RT";
+	};
 };
