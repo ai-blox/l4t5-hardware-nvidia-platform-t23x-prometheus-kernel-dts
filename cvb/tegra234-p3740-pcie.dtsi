@@ -74,6 +74,7 @@
 		       <&p2u_gbe_6>, <&p2u_gbe_7>;
 		phy-names = "p2u-0", "p2u-1", "p2u-2", "p2u-3", "p2u-4",
 			    "p2u-5", "p2u-6", "p2u-7";
+		vpcie3v3-supply = <&p3740_cx6_rst>;
 	};
 
 };

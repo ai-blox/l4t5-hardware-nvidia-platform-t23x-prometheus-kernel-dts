@@ -166,5 +166,18 @@
 			regulator-always-on;
 			enable-active-high;
 		};
+		p3740_cx6_rst: regulator@116 {
+			/*
+			 * There isn't a physical regulator corresponding to
+			 * this item.  The associated GPIO connects to the CX6
+			 * pin.  It allows us to keep RST# asserted while Linux
+			 * boots and then deassert as we bring up the CX6.
+			 */
+			compatible = "regulator-fixed";
+			reg = <116>;
+			regulator-name = "cx6-rst-reg";
+			gpio = <&tegra_aon_gpio TEGRA234_AON_GPIO(AA, 0) GPIO_OPEN_DRAIN>;
+			enable-active-high;
+		};
 	};
 };
