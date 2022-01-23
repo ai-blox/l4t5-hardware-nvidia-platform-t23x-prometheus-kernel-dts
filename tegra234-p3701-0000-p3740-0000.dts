@@ -20,6 +20,7 @@
 #include "tegra234-power-tree-p3701-0000-p3740-0000.dtsi"
 #include "tegra234-dcb-p3701-0000-a02-p3740-0000-a00.dtsi"
 #include <t234-common-cvm/tegra234-thermal.dtsi>
+#include <t234-common-cvm/tegra234-thermal-cooling.dtsi>
 #include <tegra234-soc/mods-simple-bus.dtsi>
 #include <tegra234-soc/tegra234-cpuidle.dtsi>
 #include <tegra234-soc/tegra234-soc-hwpm.dtsi>
