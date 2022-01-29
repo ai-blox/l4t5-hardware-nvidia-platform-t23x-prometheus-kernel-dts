@@ -82,25 +82,28 @@
 		status = "okay";
 	};
 
-	i2c@c240000 {
-		ucsi_ccg: ucsi_ccg@8 {
+	/* I2C7 */
+	i2c@31c0000 {
+		status = "okay";
+		clock-frequency = <400000>;
+
+		typec: stusb1600@29 {
 			status = "okay";
-			compatible = "nvidia,ccgx-ucsi";
-			ccgx,firmware-build = "gn";
-			reg = <0x08>;
-			interrupt-parent = <&tegra_aon_gpio>;
-			interrupts = <TEGRA234_AON_GPIO(BB, 2) IRQ_TYPE_LEVEL_LOW>;
-			ccg_typec_con0: connector@0 {
-				compatible = "usb-c-connector";
-				label = "USB-C";
-				data-role = "host";
-			};
-			ccg_typec_con1: connector@1 {
+			compatible = "st,stusb1600";
+			reg = <0x29>;
+			vdd-supply = <&p3740_vdd_5v_sys>;
+			vsys-supply = <&p3740_vdd_3v3_sys>;
+			interrupt-parent = <&tegra_main_gpio>;
+			interrupts = <TEGRA234_MAIN_GPIO(K, 6) IRQ_TYPE_LEVEL_LOW>;
+			typec_con: connector {
 				compatible = "usb-c-connector";
 				label = "USB-C";
 				data-role = "dual";
+				power-role = "dual";
+				typec-power-opmode = "default";
+
 				port {
-					ucsi_ccg_p1: endpoint {
+					typec_con_ep: endpoint {
 						remote-endpoint = <&usb_role_switch0>;
 					};
 				};
@@ -156,7 +159,7 @@
 				status = "okay";
 				port {
 					usb_role_switch0: endpoint {
-						remote-endpoint = <&ucsi_ccg_p1>;
+						remote-endpoint = <&typec_con_ep>;
 					};
 				};
 			};
