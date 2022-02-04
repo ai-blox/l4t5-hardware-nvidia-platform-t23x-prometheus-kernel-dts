@@ -15,7 +15,6 @@
 #include "tegra234-pwm-fan.dtsi"
 #include "tegra234-p3740-audio.dtsi"
 #include "tegra234-p3740-fixed-regulator.dtsi"
-#include "tegra234-ethernet-p3740-0000.dtsi"
 #include "tegra234-p3740-pcie.dtsi"
 
 / {
