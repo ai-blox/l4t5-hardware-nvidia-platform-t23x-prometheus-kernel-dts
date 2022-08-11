@@ -15,22 +15,30 @@
 
 #include <audio/tegra-platforms-audio-dai-links.dtsi>
 #include <audio/tegra186-audio-dai-links.dtsi>
+#include <dt-bindings/sound/rt5640.h>
 #include <dt-bindings/gpio/tegra234-gpio.h>
 #include <dt-bindings/audio/tegra234-audio.h>
 
 / {
-	i2c@31e0000 {
-		cs42888: codec@48 {
-			compatible = "cirrus,cs42888";
-			reg = <0x48>;
-			clocks = <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
+	i2c@31c0000 {
+		rt5640: rt5640.8-001c@1c {
+			compatible = "realtek,rt5640";
+			reg = <0x1c>;
+
+			clocks = <&bpmp TEGRA234_CLK_AUD_MCLK>;
 			clock-names = "mclk";
-			VA-supply = <&vdd_3v3_sys>;
-			VD-supply = <&vdd_3v3_sys>;
-			VLS-supply = <&vdd_3v3_sys>;
-			VLC-supply = <&vdd_3v3_sys>;
-			#sound-dai-cells = <0>;
+
+			realtek,dmic1-data-pin = <0>; /* RT5640_DMIC1_NULL */
+			realtek,dmic2-data-pin = <0>; /* RT5640_DMIC2_NULL */
+			realtek,jack-detect-source = <RT5640_JD_SRC_HDA_HEADER>;
+
+			/* Codec IRQ output */
+			interrupt-parent = <&tegra_main_gpio>;
+			interrupts = <TEGRA234_MAIN_GPIO(F, 3) GPIO_ACTIVE_HIGH>;
+
+			#sound-dai-cells = <1>;
 			sound-name-prefix = "CVB-RT";
+
 			status = "okay";
 		};
 	};
@@ -48,12 +56,6 @@
 
 		ahub {
 			status = "okay";
-
-			/* I2S1 */
-			i2s@2901000 {
-				status = "okay";
-				bclk-ratio = <1>;
-			};
 		};
 	};
 
@@ -78,24 +80,26 @@
 		assigned-clock-parents = <&bpmp_clks TEGRA234_CLK_PLLA_OUT0>;
 
 		nvidia-audio-card,widgets =
-			"Headphone",	"CVB-RT Headphone Jack",
-			"Microphone",	"CVB-RT Microphone Jack";
+			"Headphone",    "CVB-RT Headphone Jack",
+			"Microphone",   "CVB-RT Mic Jack",
+			"Speaker",      "CVB-RT Int Spk",
+			"Microphone",   "CVB-RT Int Mic";
 
 		nvidia-audio-card,routing =
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT1L",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT1R",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT2L",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT2R",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT3L",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT3R",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT4L",
-			"CVB-RT Headphone Jack",	"CVB-RT AOUT4R",
-			"CVB-RT AIN1L",			"CVB-RT Microphone Jack", /* Front mic */
-			"CVB-RT AIN1R",			"CVB-RT Microphone Jack", /* Rear mic */
-			"CVB-RT AIN2L",			"CVB-RT Microphone Jack", /* Line-in L */
-			"CVB-RT AIN2R",			"CVB-RT Microphone Jack"; /* Line-in R */
+			"CVB-RT Headphone Jack",     "CVB-RT HPOL",
+			"CVB-RT Headphone Jack",     "CVB-RT HPOR",
+			"CVB-RT IN1P",               "CVB-RT Mic Jack",
+			"CVB-RT IN2P",               "CVB-RT Mic Jack",
+			"CVB-RT IN2N",               "CVB-RT Mic Jack",
+			"CVB-RT IN3P",               "CVB-RT Mic Jack",
+			"CVB-RT Int Spk",            "CVB-RT SPOLP",
+			"CVB-RT Int Spk",            "CVB-RT SPORP",
+			"CVB-RT Int Spk",            "CVB-RT LOUTL",
+			"CVB-RT Int Spk",            "CVB-RT LOUTR",
+			"CVB-RT DMIC1",              "CVB-RT Int Mic",
+			"CVB-RT DMIC2",              "CVB-RT Int Mic";
 
-		nvidia-audio-card,mclk-fs = <512>;
+		nvidia-audio-card,mclk-fs = <256>;
 	};
 };
 
@@ -107,17 +111,10 @@
  * platform specific files.
  */
 
-&i2s1_to_codec {
-	link-name = "cs42888 playback";
-
-	/* Tegra will generate MCLK, SCLK, and FSYNC */
-	format = "dsp_a"; /* TDM with 1-bit offset */
-	num-channel = <8>;
-	srate = <48000>;
-	bit-format = "s32_le";
-
+&i2s4_to_codec {
+	link-name = "rt5640-playback";
 	codec {
-		sound-dai = <&cs42888>;
+		sound-dai = <&rt5640 0>;
 		prefix = "CVB-RT";
 	};
 };
