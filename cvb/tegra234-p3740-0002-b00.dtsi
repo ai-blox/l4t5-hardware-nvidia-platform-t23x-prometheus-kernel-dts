@@ -14,6 +14,7 @@
 #include <dt-bindings/gpio/tegra234-gpio.h>
 #include <dt-bindings/input/input.h>
 #include "tegra234-p3740-b00-fixed-regulator.dtsi"
+#include "tegra234-p3740-b00-pcie.dtsi"
 
 / {
 	gpio-keys {
