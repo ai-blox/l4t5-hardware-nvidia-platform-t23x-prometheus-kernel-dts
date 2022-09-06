@@ -16,7 +16,7 @@
 	/* PCIe-C1: 6-Lane PCIe Switch */
 	pcie@14100000 {
 		status = "okay";
-
+		vpcie3v3-supply = <&p3740_vdd_wifi_3v3>;
 		phys = <&p2u_hsio_3>;
 		phy-names = "p2u-0";
 	};
