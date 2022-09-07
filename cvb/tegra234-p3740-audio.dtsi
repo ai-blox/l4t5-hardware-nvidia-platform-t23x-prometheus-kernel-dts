@@ -21,7 +21,7 @@
 
 / {
 	i2c@31c0000 {
-		rt5640: rt5640.8-001c@1c {
+		rt5640: rt5640.6-001c@1c {
 			compatible = "realtek,rt5640";
 			reg = <0x1c>;
 
