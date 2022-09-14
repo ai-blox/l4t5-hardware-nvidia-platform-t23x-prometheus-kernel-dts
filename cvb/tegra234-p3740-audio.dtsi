@@ -64,14 +64,14 @@
 	};
 
 	hda@3510000 {
-		nvidia,model = "NVIDIA Jetson Prometheus HDA";
+		nvidia,model = "NVIDIA Holoscan MGX HDA";
 		status = "okay";
 	};
 
 	tegra_sound: sound {
 		status = "okay";
 		compatible = "nvidia,tegra186-ape";
-		nvidia-audio-card,name = "NVIDIA Jetson Prometheus APE";
+		nvidia-audio-card,name = "NVIDIA Holoscan MGX APE";
 		clocks = <&bpmp_clks TEGRA234_CLK_PLLA>,
 			 <&bpmp_clks TEGRA234_CLK_PLLA_OUT0>,
 			 <&bpmp_clks TEGRA234_CLK_AUD_MCLK>;
