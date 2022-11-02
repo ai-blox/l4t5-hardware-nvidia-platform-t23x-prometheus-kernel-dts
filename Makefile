@@ -10,10 +10,12 @@ BUILD_ENABLE=y
 endif
 
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0000-p3740-0000.dtb
-dtbo-$(BUILD_ENABLE) += tegra234-p3740-overlay-pcie.dtbo
-
-
 dtb-$(BUILD_ENABLE) += tegra234-p3701-0002-p3740-0002.dtb
+dtbo-$(BUILD_ENABLE) += tegra234-p3740-overlay-pcie.dtbo
+dtbo-$(BUILD_ENABLE) += tegra234-p3740-camera-hawk-owl-overlay.dtbo
+dtbo-$(BUILD_ENABLE) += tegra234-p3740-camera-p3785-overlay.dtbo
+
+
 
 ifneq ($(dtb-y),)
 dtb-y := $(addprefix $(makefile-path)/,$(dtb-y))
