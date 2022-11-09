@@ -15,6 +15,7 @@ dtb-$(BUILD_ENABLE) += tegra234-p3701-0002-p3740-0002-b01.dtb
 dtbo-$(BUILD_ENABLE) += tegra234-p3740-overlay-pcie.dtbo
 dtbo-$(BUILD_ENABLE) += tegra234-p3740-camera-hawk-owl-overlay.dtbo
 dtbo-$(BUILD_ENABLE) += tegra234-p3740-camera-p3785-overlay.dtbo
+dtb-$(BUILD_ENABLE) += tegra234-p3701-0002-p3740-0002-safety.dtb
 
 ifneq ($(dtb-y),)
 dtb-y := $(addprefix $(makefile-path)/,$(dtb-y))
