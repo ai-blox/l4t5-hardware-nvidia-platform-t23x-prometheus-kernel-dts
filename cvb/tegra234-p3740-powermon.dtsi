@@ -21,17 +21,17 @@
 			#io-channel-cells = <1>;
 			channel@0 {
 				reg = <0x0>;
-				label = "VDD_ATX_12V";
+				label = "CVB_ATX_12V";
 				shunt-resistor-micro-ohms = <2000>;
 			};
 			channel@1 {
 				reg = <0x1>;
-				label = "VDD_ATX_3V3";
+				label = "CVB_ATX_3V3";
 				shunt-resistor-micro-ohms = <2000>;
 			};
 			channel@2 {
 				reg = <0x2>;
-				label = "VDD_ATX_5V";
+				label = "CVB_ATX_5V";
 				shunt-resistor-micro-ohms = <2000>;
 			};
 		};
@@ -40,6 +40,7 @@
 			compatible = "ti,ina219";
 			reg = <0x44>;
 			shunt-resistor = <2000>;
+                        label = "CVB_ATX_12V_8P";
 		};
 	};
 };
