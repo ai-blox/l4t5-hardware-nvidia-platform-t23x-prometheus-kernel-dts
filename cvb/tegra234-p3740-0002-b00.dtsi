@@ -54,6 +54,19 @@
 			};
 		};
 	};
+	spi@c260000{ /* SPI2 in 40 pin conn */
+		status = "okay";
+		spi@0 { /* chip select 0 */
+			compatible = "tegra-spidev";
+			reg = <0x0>;
+			spi-max-frequency = <50000000>;
+			controller-data {
+				nvidia,enable-hw-based-cs;
+				nvidia,rx-clk-tap-delay = <0x10>;
+				nvidia,tx-clk-tap-delay = <0x0>;
+			};
+		};
+	};
 
 	serial@3110000 {
 		status = "okay";
