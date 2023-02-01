@@ -54,7 +54,9 @@
 			};
 		};
 	};
-	spi@c260000{ /* SPI2 in 40 pin conn */
+
+	/* SPI1 connects to TPM */
+	spi@3210000 {
 		status = "okay";
 		spi@0 { /* chip select 0 */
 			compatible = "tegra-spidev";
