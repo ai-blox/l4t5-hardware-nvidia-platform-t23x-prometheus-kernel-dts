@@ -18,6 +18,7 @@
 #include "cvb/tegra234-p3740-0002-b00.dtsi"
 #include "cvb/tegra234-pwm-fan.dtsi"
 #include <tegra234-soc/mods-simple-bus.dtsi>
+#include <tegra234-soc/tegra234-soc-hwpm.dtsi>
 #include <t234-common-cvm/tegra234-cpuidle.dtsi>
 #include "tegra234-dcb-p3701-0000-a02-p3740-0000-a00.dtsi"
 
@@ -39,6 +40,10 @@
 	};
 
 	display@13800000 {
+		status = "okay";
+	};
+
+	tegra_soc_hwpm {
 		status = "okay";
 	};
 };
